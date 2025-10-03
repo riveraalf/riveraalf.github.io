@@ -685,3 +685,31 @@ footer {
         padding: 2rem 0;
     }
 }
+
+/* ===== Mobile Horizontal Scroll for All Businesses ===== */
+@media (max-width: 768px) {
+    .project-grid {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        gap: 1rem; /* space between cards */
+        padding: 1rem;
+    }
+
+    .project-card {
+        flex: 0 0 100%; /* each card takes full viewport width */
+        scroll-snap-align: center;
+        border-radius: 20px;
+        min-width: 90%; /* ensures it looks like a slide */
+    }
+
+    /* Optional: hide scrollbar */
+    .project-grid::-webkit-scrollbar {
+        display: none;
+    }
+    .project-grid {
+        -ms-overflow-style: none;  /* IE/Edge */
+        scrollbar-width: none;     /* Firefox */
+    }
+}
