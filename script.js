@@ -1,20 +1,100 @@
-// ===== Theme Toggle =====
-const toggleButton = document.getElementById('theme-toggle');
-const body = document.body;
+// ===== Business Card Click Handler =====
+const businessCards = document.querySelectorAll('.project-card');
+const businessModal = document.createElement('div');
+businessModal.className = 'business-modal';
+businessModal.innerHTML = `
+    <div class="business-modal-overlay"></div>
+    <div class="business-modal-content">
+        <button class="business-modal-close">&times;</button>
+        <h2 class="business-modal-title"></h2>
+        <img class="business-modal-image" src="" alt="">
+        <p class="business-modal-description"></p>
+    </div>
+`;
+document.body.appendChild(businessModal);
 
-if (localStorage.getItem('theme') === 'dark') {
-    body.classList.add('dark-mode');
-    toggleButton.textContent = '☀️ Light Mode';
+const modalOverlay = businessModal.querySelector('.business-modal-overlay');
+const modalContent = businessModal.querySelector('.business-modal-content');
+const modalClose = businessModal.querySelector('.business-modal-close');
+const modalTitle = businessModal.querySelector('.business-modal-title');
+const modalImage = businessModal.querySelector('.business-modal-image');
+const modalDescription = businessModal.querySelector('.business-modal-description');
+
+function openBusinessModal(businessName) {
+    const card = Array.from(businessCards).find(card => {
+        const title = card.querySelector('h3').textContent;
+        return title === businessName;
+    });
+    
+    if (card) {
+        const title = card.querySelector('h3').textContent;
+        const description = card.querySelector('p').textContent;
+        const image = card.querySelector('img').src;
+        
+        modalTitle.textContent = title;
+        modalDescription.textContent = description;
+        modalImage.src = image;
+        
+        businessModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
 }
 
-toggleButton.addEventListener('click', () => {
-    body.classList.toggle('dark-mode');
-    if (body.classList.contains('dark-mode')) {
-        toggleButton.textContent = '☀️ Light Mode';
-        localStorage.setItem('theme', 'dark');
+businessCards.forEach(card => {
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', () => {
+        const title = card.querySelector('h3').textContent;
+        
+        // Update URL with business name
+        const url = new URL(window.location);
+        url.searchParams.set('business', title);
+        window.history.pushState({}, '', url);
+        
+        openBusinessModal(title);
+    });
+});
+
+function closeModal() {
+    businessModal.classList.remove('active');
+    document.body.style.overflow = '';
+    
+    // Remove business parameter from URL
+    const url = new URL(window.location);
+    url.searchParams.delete('business');
+    window.history.pushState({}, '', url);
+}
+
+modalClose.addEventListener('click', closeModal);
+modalOverlay.addEventListener('click', closeModal);
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && businessModal.classList.contains('active')) {
+        closeModal();
+    }
+});
+
+// Check URL on page load
+window.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const businessName = urlParams.get('business');
+    
+    if (businessName) {
+        openBusinessModal(businessName);
+    }
+});
+
+// Handle browser back/forward buttons
+window.addEventListener('popstate', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const businessName = urlParams.get('business');
+    
+    if (businessName) {
+        openBusinessModal(businessName);
     } else {
-        toggleButton.textContent = '🌙 Dark Mode';
-        localStorage.setItem('theme', 'light');
+        if (businessModal.classList.contains('active')) {
+            businessModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
     }
 });
 
@@ -52,41 +132,3 @@ if (searchBox) {
         });
     });
 }
-
-// ===== Multi-Category Filter =====
-let selectedCategories = [];
-
-document.querySelectorAll('.category-filters button').forEach(button => {
-    button.addEventListener('click', () => {
-        const filter = button.getAttribute('data-filter');
-
-        if (filter === 'All') {
-            // Reset filter
-            selectedCategories = [];
-            document.querySelectorAll('.category-filters button').forEach(btn => btn.classList.remove('active'));
-            businessList.querySelectorAll('.project-card').forEach(card => card.style.display = '');
-            return;
-        }
-
-        // Toggle category selection
-        if (selectedCategories.includes(filter)) {
-            selectedCategories = selectedCategories.filter(f => f !== filter);
-            button.classList.remove('active');
-        } else {
-            selectedCategories.push(filter);
-            button.classList.add('active');
-        }
-
-        // Filter logic
-        businessList.querySelectorAll('.project-card').forEach(card => {
-            const cardCategories = card.dataset.category.split(',').map(c => c.trim());
-            const matches = selectedCategories.some(cat => cardCategories.includes(cat));
-
-            if (matches || selectedCategories.length === 0) {
-                card.style.display = '';
-            } else {
-                card.style.display = 'none';
-            }
-        });
-    });
-});

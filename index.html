@@ -4,23 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="A platform to showcase and advertise small businesses, student projects, and side hustles.">
-    <title>Business Showcase</title>
+    <title>CUA Business Showcase</title>
     <link rel="stylesheet" href="styles.css">
     <!-- JetBrains Mono Font -->
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <!-- Theme Toggle -->
-    <div class="theme-toggle-container">
-        <button id="theme-toggle">🌙 Dark Mode</button>
-    </div>
-
     <!-- Hero -->
     <section class="hero">
         <div class="container hero-flex">
             <div class="hero-text">
-                <h1>Business Showcase</h1>
+                <h1>CUA Business Showcase</h1>
                 <p>Discover local talents, projects, and businesses all in one place.</p>
             </div>
             <div class="search-container">
@@ -29,40 +24,14 @@
         </div>
     </section>
 
-    <!-- Category Filters -->
-    <section class="category-filters-container">
-        <div class="container category-filters">
-            <button data-filter="All">All</button>
-            <button data-filter="Agriculture and Farming">Agriculture & Farming</button>
-            <button data-filter="Mining">Mining</button>
-            <button data-filter="Manufacturing">Manufacturing</button>
-            <button data-filter="Construction">Construction</button>
-            <button data-filter="Wholesale Trade">Wholesale Trade</button>
-            <button data-filter="Retail Trade">Retail Trade</button>
-            <button data-filter="Transportation and Warehousing">Transportation & Warehousing</button>
-            <button data-filter="Utilities">Utilities</button>
-            <button data-filter="Information">Information</button>
-            <button data-filter="Finance and Insurance">Finance & Insurance</button>
-            <button data-filter="Real Estate">Real Estate</button>
-            <button data-filter="Professional, Scientific, and Technical Services">Professional Services</button>
-            <button data-filter="Administrative and Support Services">Admin & Support Services</button>
-            <button data-filter="Education">Education</button>
-            <button data-filter="Health Care and Social Assistance">Health Care & Social Assistance</button>
-            <button data-filter="Arts, Entertainment, and Recreation">Arts, Entertainment, & Recreation</button>
-            <button data-filter="Accommodation and Food Services">Accommodation & Food Services</button>
-            <button data-filter="Public Administration">Public Administration</button>
-            <button data-filter="Non-profit Organizations">Non-Profit Organizations</button>
-        </div>
-    </section>
-
     <!-- Alfredo's Business of the Month -->
     <section class="business-month">
         <div class="container">
             <h2>Alfredo's Business of the Month</h2>
-            <div class="project-card highlight" data-category="Arts, Entertainment, and Recreation, Hospitality">
-                <img src="https://picsum.photos/600/300" alt="Alfredo's pick">
+            <div class="project-card highlight">
+                <img src="https://picsum.photos/600/600" alt="Alfredo's pick">
                 <h3>Special Feature</h3>
-                <p>This month’s top pick chosen by Alfredo — showcasing innovation and excellence.</p>
+                <p>This month's top pick chosen by Alfredo — showcasing innovation and excellence.</p>
             </div>
         </div>
     </section>
@@ -72,19 +41,19 @@
         <div class="container">
             <h2>Featured</h2>
             <div class="project-grid">
-                <div class="project-card" data-category="Retail Trade, Information">
-                    <img src="https://picsum.photos/300/200" alt="Business">
-                    <h3>Featured Business</h3>
+                <div class="project-card">
+                    <img src="https://picsum.photos/300/300" alt="Business">
+                    <h3>Featured Business 1</h3>
                     <p>Short description highlighting why this project stands out.</p>
                 </div>
-                <div class="project-card" data-category="Retail Trade, Finance and Insurance">
-                    <img src="https://picsum.photos/300/200" alt="Business">
-                    <h3>Featured Business</h3>
+                <div class="project-card">
+                    <img src="https://picsum.photos/301/301" alt="Business">
+                    <h3>Featured Business 2</h3>
                     <p>Short description highlighting why this project stands out.</p>
                 </div>
-                <div class="project-card" data-category="Retail Trade, Real Estate">
-                    <img src="https://picsum.photos/300/200" alt="Business">
-                    <h3>Featured Business</h3>
+                <div class="project-card">
+                    <img src="https://picsum.photos/302/302" alt="Business">
+                    <h3>Featured Business 3</h3>
                     <p>Short description highlighting why this project stands out.</p>
                 </div>
             </div>
@@ -92,32 +61,32 @@
     </section>
 
     <!-- Video Advert -->
-<section class="video-advert">
-    <div class="container">
-        <h2>Video Advert</h2>
-        <div class="video-wrapper">
-            <iframe width="560" height="315" 
-                src="https://www.youtube.com/embed/m9KuGVetQvc" 
-                title="Business Promo Video" 
-                frameborder="0" 
-                allowfullscreen>
-            </iframe>
+    <section class="video-advert">
+        <div class="container">
+            <h2>Video Advert</h2>
+            <div class="video-wrapper">
+                <iframe width="560" height="315" 
+                    src="https://www.youtube.com/embed/m9KuGVetQvc" 
+                    title="Business Promo Video" 
+                    frameborder="0" 
+                    allowfullscreen>
+                </iframe>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
     <!-- All Businesses -->
     <section class="all-businesses">
         <div class="container">
             <h2>All Businesses</h2>
             <div class="project-grid" id="business-list">
-                <div class="project-card" data-category="Agriculture and Farming, Retail Trade">
-                    <img src="https://picsum.photos/300/200" alt="Business">
+                <div class="project-card">
+                    <img src="https://picsum.photos/303/303" alt="Business">
                     <h3>Organic Farm</h3>
                     <p>Fresh vegetables and fruits grown locally.</p>
                 </div>
-                <div class="project-card" data-category="Information, Professional, Scientific, and Technical Services">
-                    <img src="https://picsum.photos/300/200" alt="Business">
+                <div class="project-card">
+                    <img src="https://picsum.photos/304/304" alt="Business">
                     <h3>Web Development Studio</h3>
                     <p>Custom-built websites and mobile applications.</p>
                 </div>
@@ -148,7 +117,7 @@
                     <span class="arrow">▼</span>
                 </button>
                 <div class="dropdown-content">
-                    <p>Please use the “Submit Project” feature or contact us via email with details about your business, product, or service.</p>
+                    <p>Please contact us via <a href="mailto:riveraalf@cua.edu">email</a> with details about your business, product, or service.</p>
                 </div>
             </div>
 
@@ -158,7 +127,7 @@
                     <span class="arrow">▼</span>
                 </button>
                 <div class="dropdown-content">
-                    <p>Mr. Alfredo personally reviews all submissions and selects a business based on creativity, community impact, and exceptional quality.</p>
+                    <p>Alfredo personally reviews all submissions and selects a business based on creativity, community impact, and exceptional quality.</p>
                 </div>
             </div>
 
@@ -177,7 +146,7 @@
     <!-- Footer -->
     <footer>
         <div class="container">
-            <p>0.0.1 updated 9/25/2025</p>
+            <p>0.0.2 updated 10/2/2025</p>
         </div>
     </footer>
 
