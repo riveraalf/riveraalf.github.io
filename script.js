@@ -56,11 +56,13 @@ businessCards.forEach(card => {
 
 function closeModal() {
     businessModal.classList.remove('active');
+    videoModal.classList.remove('active');
     document.body.style.overflow = '';
     
-    // Remove business parameter from URL
+    // Remove business/video parameter from URL
     const url = new URL(window.location);
     url.searchParams.delete('business');
+    url.searchParams.delete('video');
     window.history.pushState({}, '', url);
 }
 
@@ -68,18 +70,94 @@ modalClose.addEventListener('click', closeModal);
 modalOverlay.addEventListener('click', closeModal);
 
 document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && businessModal.classList.contains('active')) {
-        closeModal();
+    if (e.key === 'Escape') {
+        if (businessModal.classList.contains('active') || videoModal.classList.contains('active')) {
+            closeModal();
+        }
     }
+});
+
+// ===== Video Modal Handler =====
+const videoCards = document.querySelectorAll('.video-card');
+const videoModal = document.createElement('div');
+videoModal.className = 'video-modal';
+videoModal.innerHTML = `
+    <div class="video-modal-overlay"></div>
+    <div class="video-modal-content">
+        <button class="video-modal-close">&times;</button>
+        <h2 class="video-modal-title"></h2>
+        <div class="video-modal-wrapper">
+            <iframe width="560" height="315" 
+                src="" 
+                title="Video" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+            </iframe>
+        </div>
+        <p class="video-modal-description"></p>
+    </div>
+`;
+document.body.appendChild(videoModal);
+
+const videoModalOverlay = videoModal.querySelector('.video-modal-overlay');
+const videoModalClose = videoModal.querySelector('.video-modal-close');
+const videoModalTitle = videoModal.querySelector('.video-modal-title');
+const videoModalIframe = videoModal.querySelector('iframe');
+const videoModalDescription = videoModal.querySelector('.video-modal-description');
+
+function openVideoModal(videoId) {
+    const card = Array.from(videoCards).find(card => card.dataset.videoId === videoId);
+    
+    if (card) {
+        const title = card.querySelector('h3').textContent;
+        const description = card.querySelector('p').textContent;
+        
+        videoModalTitle.textContent = title;
+        videoModalDescription.textContent = description;
+        videoModalIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+        
+        videoModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+videoCards.forEach(card => {
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', () => {
+        const videoId = card.dataset.videoId;
+        
+        // Update URL with video ID
+        const url = new URL(window.location);
+        url.searchParams.set('video', videoId);
+        window.history.pushState({}, '', url);
+        
+        openVideoModal(videoId);
+    });
+});
+
+videoModalClose.addEventListener('click', () => {
+    closeModal();
+    // Stop video playback
+    videoModalIframe.src = '';
+});
+
+videoModalOverlay.addEventListener('click', () => {
+    closeModal();
+    // Stop video playback
+    videoModalIframe.src = '';
 });
 
 // Check URL on page load
 window.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const businessName = urlParams.get('business');
+    const videoId = urlParams.get('video');
     
     if (businessName) {
         openBusinessModal(businessName);
+    } else if (videoId) {
+        openVideoModal(videoId);
     }
 });
 
@@ -87,13 +165,21 @@ window.addEventListener('DOMContentLoaded', () => {
 window.addEventListener('popstate', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const businessName = urlParams.get('business');
+    const videoId = urlParams.get('video');
     
     if (businessName) {
         openBusinessModal(businessName);
+    } else if (videoId) {
+        openVideoModal(videoId);
     } else {
         if (businessModal.classList.contains('active')) {
             businessModal.classList.remove('active');
             document.body.style.overflow = '';
+        }
+        if (videoModal.classList.contains('active')) {
+            videoModal.classList.remove('active');
+            document.body.style.overflow = '';
+            videoModalIframe.src = '';
         }
     }
 });
@@ -121,14 +207,36 @@ scrollTopBtn.addEventListener('click', () => {
 
 // ===== Search Filter =====
 const searchBox = document.getElementById('search-box');
-const businessList = document.getElementById('business-list');
 
 if (searchBox) {
     searchBox.addEventListener('input', () => {
         const term = searchBox.value.toLowerCase();
-        businessList.querySelectorAll('.project-card').forEach(card => {
-            const text = card.innerText.toLowerCase();
-            card.style.display = text.includes(term) ? '' : 'none';
-        });
+        
+        // Search in Featured section
+        const featuredSection = document.querySelector('.featured');
+        if (featuredSection) {
+            featuredSection.querySelectorAll('.project-card').forEach(card => {
+                const text = card.innerText.toLowerCase();
+                card.style.display = text.includes(term) ? '' : 'none';
+            });
+        }
+        
+        // Search in Video Adverts section
+        const videoSection = document.querySelector('.video-adverts');
+        if (videoSection) {
+            videoSection.querySelectorAll('.video-card').forEach(card => {
+                const text = card.innerText.toLowerCase();
+                card.style.display = text.includes(term) ? '' : 'none';
+            });
+        }
+        
+        // Search in All Businesses section
+        const businessList = document.getElementById('business-list');
+        if (businessList) {
+            businessList.querySelectorAll('.project-card').forEach(card => {
+                const text = card.innerText.toLowerCase();
+                card.style.display = text.includes(term) ? '' : 'none';
+            });
+        }
     });
 }

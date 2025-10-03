@@ -118,57 +118,237 @@
     background: rgba(255, 255, 255, 0.3);
 }
 
-/* ===== Air Bubble Effect ===== */
-.air-bubble {
+/* ===== Video Modal ===== */
+.video-modal {
     position: fixed;
-    width: 300px;
-    height: 300px;
-    border-radius: 50%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
     pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%);
-    background: radial-gradient(circle at center, 
-        rgba(255, 255, 255, 0.15) 0%,
-        rgba(255, 255, 255, 0.08) 30%,
-        rgba(255, 255, 255, 0.02) 60%,
-        transparent 100%);
-    box-shadow: 
-        0 0 40px rgba(255, 255, 255, 0.1),
-        inset 0 0 60px rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(5px) brightness(1.2);
-    -webkit-backdrop-filter: blur(5px) brightness(1.2);
-    transition: all 0.15s ease-out;
-    mix-blend-mode: screen;
+    transition: opacity 0.3s ease;
 }
 
-.air-bubble::before {
+.video-modal.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.video-modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+}
+
+.video-modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 900px;
+    background: rgba(30, 30, 30, 0.95);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+    padding: 3rem;
+    box-shadow: 
+        0 30px 80px rgba(0, 0, 0, 0.8),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+    transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.video-modal.active .video-modal-content {
+    transform: scale(1);
+}
+
+.video-modal-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 2rem;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    line-height: 1;
+    padding: 0;
+    z-index: 10001;
+}
+
+.video-modal-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+.video-modal-title {
+    font-size: 2.5rem;
+    color: #fff;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+.video-modal-wrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    margin-bottom: 1.5rem;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.video-modal-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+}
+
+.video-modal-description {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #b0b0b0;
+}
+
+/* Custom scrollbar for video modal */
+.video-modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.video-modal-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+.video-modal-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+
+.video-modal-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* ===== Video Cards ===== */
+.video-card {
+    position: relative;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: cardSlideIn 0.6s ease backwards;
+    cursor: pointer;
+}
+
+.video-card::before {
     content: '';
     position: absolute;
-    top: 15%;
-    left: 15%;
-    width: 40%;
-    height: 40%;
-    border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, 
-        rgba(255, 255, 255, 0.4),
-        rgba(255, 255, 255, 0.1) 50%,
-        transparent 70%);
-    filter: blur(10px);
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
-.air-bubble::after {
-    content: '';
+.video-card:hover::before {
+    opacity: 1;
+}
+
+.video-card:hover {
+    transform: translateY(-12px) scale(1.02);
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+}
+
+.video-card img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+    filter: brightness(0.7) grayscale(0.2);
+}
+
+.video-card:hover img {
+    transform: scale(1.1);
+    filter: brightness(0.5) grayscale(0);
+}
+
+.play-overlay {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
     transform: translate(-50%, -50%);
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 
-        0 0 20px rgba(255, 255, 255, 0.05),
-        inset 0 0 30px rgba(255, 255, 255, 0.03);
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: #fff;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.video-card:hover .play-overlay {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%) scale(1.1);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+}
+
+.video-card h3 {
+    margin: 1.5rem 0 0.5rem;
+    font-size: 1.5rem;
+    color: #d0d0d0;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    position: relative;
+    z-index: 10;
+}
+
+.video-card p {
+    padding: 0 1.5rem 1.5rem;
+    color: #a0a0a0;
+    line-height: 1.6;
+    position: relative;
+    z-index: 10;
 }
 
 /* ===== Global Styles ===== */
@@ -214,27 +394,6 @@ body::before {
     margin: auto;
     position: relative;
     z-index: 1;
-}
-
-/* ===== Liquid Glass Effect ===== */
-.glass {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 
-        0 8px 32px 0 rgba(0, 0, 0, 0.5),
-        inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
-}
-
-.glass-strong {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(25px) saturate(200%);
-    -webkit-backdrop-filter: blur(25px) saturate(200%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 
-        0 8px 32px 0 rgba(0, 0, 0, 0.6),
-        inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
 }
 
 /* ===== Hero ===== */
@@ -352,36 +511,6 @@ section h2 {
     text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
 }
 
-/* ===== Business of the Month ===== */
-.business-month .highlight {
-    background: linear-gradient(135deg, rgba(80, 80, 80, 0.2) 0%, rgba(40, 40, 40, 0.2) 100%);
-    backdrop-filter: blur(25px) saturate(200%);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 
-        0 25px 50px rgba(0, 0, 0, 0.5),
-        inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
-    transform: scale(1);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.business-month .highlight img {
-    height: 600px;
-}
-
-.business-month .highlight:hover {
-    transform: scale(1.03) translateY(-10px);
-    box-shadow: 
-        0 30px 60px rgba(0, 0, 0, 0.7),
-        inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.3);
-}
-
-.business-month .highlight h3,
-.business-month .highlight p {
-    color: #fff;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-}
-
 /* ===== Project Grid ===== */
 .project-grid {
     display: grid;
@@ -474,31 +603,6 @@ section h2 {
     line-height: 1.6;
 }
 
-/* ===== Video Advert ===== */
-.video-advert {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 30px;
-    padding: 3rem 1rem;
-    margin: 2rem auto;
-    box-shadow: 
-        0 10px 30px rgba(0, 0, 0, 0.5),
-        inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
-}
-
-.video-wrapper {
-    display: flex;
-    justify-content: center;
-}
-
-.video-wrapper iframe {
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-    max-width: 100%;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
 /* ===== FAQ ===== */
 .faq {
     background: rgba(255, 255, 255, 0.03);
@@ -510,10 +614,6 @@ section h2 {
         0 10px 30px rgba(0, 0, 0, 0.5),
         inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
     margin: 2rem auto;
-}
-
-.faq h2 {
-    color: #fff;
 }
 
 .faq-item {
@@ -659,24 +759,35 @@ footer {
     }
     
     .project-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        gap: 1rem;
+        padding: 1rem;
+        grid-template-columns: none;
+    }
+
+    .project-card,
+    .video-card {
+        flex: 0 0 90%;
+        scroll-snap-align: center;
+        min-width: 90%;
     }
     
-    .project-card img {
+    .project-card img,
+    .video-card img {
         height: 200px;
     }
     
-    .business-month .highlight img {
-        height: 250px;
-    }
-    
-    .project-card h3 {
+    .project-card h3,
+    .video-card h3 {
         font-size: 1.2rem;
         margin: 1rem 0 0.5rem;
     }
     
-    .project-card p {
+    .project-card p,
+    .video-card p {
         padding: 0 1rem 1rem;
         font-size: 0.9rem;
     }
@@ -684,32 +795,24 @@ footer {
     section {
         padding: 2rem 0;
     }
-}
-
-/* ===== Mobile Horizontal Scroll for All Businesses ===== */
-@media (max-width: 768px) {
-    .project-grid {
-        display: flex;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
-        gap: 1rem; /* space between cards */
-        padding: 1rem;
+    
+    .business-modal-content,
+    .video-modal-content {
+        padding: 2rem;
+        width: 95%;
+    }
+    
+    .business-modal-title,
+    .video-modal-title {
+        font-size: 1.8rem;
     }
 
-    .project-card {
-        flex: 0 0 100%; /* each card takes full viewport width */
-        scroll-snap-align: center;
-        border-radius: 20px;
-        min-width: 90%; /* ensures it looks like a slide */
-    }
-
-    /* Optional: hide scrollbar */
     .project-grid::-webkit-scrollbar {
         display: none;
     }
+    
     .project-grid {
-        -ms-overflow-style: none;  /* IE/Edge */
-        scrollbar-width: none;     /* Firefox */
+        -ms-overflow-style: none;
+        scrollbar-width: none;
     }
 }
