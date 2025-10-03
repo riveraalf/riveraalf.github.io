@@ -660,5 +660,28 @@ footer {
     
     .project-grid {
         grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .project-card img {
+        height: 200px;
+    }
+    
+    .business-month .highlight img {
+        height: 250px;
+    }
+    
+    .project-card h3 {
+        font-size: 1.2rem;
+        margin: 1rem 0 0.5rem;
+    }
+    
+    .project-card p {
+        padding: 0 1rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    section {
+        padding: 2rem 0;
     }
 }
