@@ -20,11 +20,8 @@ const modalTitle = businessModal.querySelector('.business-modal-title');
 const modalImage = businessModal.querySelector('.business-modal-image');
 const modalDescription = businessModal.querySelector('.business-modal-description');
 
-function openBusinessModal(businessName) {
-    const card = Array.from(businessCards).find(card => {
-        const title = card.querySelector('h3').textContent;
-        return title === businessName;
-    });
+function openBusinessModal(businessId) {
+    const card = Array.from(businessCards).find(card => card.dataset.businessId === businessId);
     
     if (card) {
         const title = card.querySelector('h3').textContent;
@@ -43,14 +40,14 @@ function openBusinessModal(businessName) {
 businessCards.forEach(card => {
     card.style.cursor = 'pointer';
     card.addEventListener('click', () => {
-        const title = card.querySelector('h3').textContent;
+        const businessId = card.dataset.businessId;
         
-        // Update URL with business name
+        // Update URL with business ID using query parameter
         const url = new URL(window.location);
-        url.searchParams.set('business', title);
+        url.searchParams.set('b', businessId);
         window.history.pushState({}, '', url);
         
-        openBusinessModal(title);
+        openBusinessModal(businessId);
     });
 });
 
@@ -59,10 +56,10 @@ function closeModal() {
     videoModal.classList.remove('active');
     document.body.style.overflow = '';
     
-    // Remove business/video parameter from URL
+    // Remove query parameters from URL
     const url = new URL(window.location);
-    url.searchParams.delete('business');
-    url.searchParams.delete('video');
+    url.searchParams.delete('b');
+    url.searchParams.delete('v');
     window.history.pushState({}, '', url);
 }
 
@@ -106,8 +103,8 @@ const videoModalTitle = videoModal.querySelector('.video-modal-title');
 const videoModalIframe = videoModal.querySelector('iframe');
 const videoModalDescription = videoModal.querySelector('.video-modal-description');
 
-function openVideoModal(videoId) {
-    const card = Array.from(videoCards).find(card => card.dataset.videoId === videoId);
+function openVideoModal(videoId, businessId) {
+    const card = Array.from(videoCards).find(card => card.dataset.businessId === businessId);
     
     if (card) {
         const title = card.querySelector('h3').textContent;
@@ -126,13 +123,15 @@ videoCards.forEach(card => {
     card.style.cursor = 'pointer';
     card.addEventListener('click', () => {
         const videoId = card.dataset.videoId;
+        const businessId = card.dataset.businessId;
         
-        // Update URL with video ID
+        // Update URL with business ID and video flag
         const url = new URL(window.location);
-        url.searchParams.set('video', videoId);
+        url.searchParams.set('b', businessId);
+        url.searchParams.set('v', 'true');
         window.history.pushState({}, '', url);
         
-        openVideoModal(videoId);
+        openVideoModal(videoId, businessId);
     });
 });
 
@@ -151,27 +150,42 @@ videoModalOverlay.addEventListener('click', () => {
 // Check URL on page load
 window.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
-    const businessName = urlParams.get('business');
-    const videoId = urlParams.get('video');
+    const businessId = urlParams.get('b');
+    const isVideo = urlParams.get('v');
     
-    if (businessName) {
-        openBusinessModal(businessName);
-    } else if (videoId) {
-        openVideoModal(videoId);
+    if (businessId) {
+        if (isVideo === 'true') {
+            // Find the video card with this business ID
+            const videoCard = Array.from(videoCards).find(card => card.dataset.businessId === businessId);
+            if (videoCard) {
+                const videoId = videoCard.dataset.videoId;
+                openVideoModal(videoId, businessId);
+            }
+        } else {
+            openBusinessModal(businessId);
+        }
     }
 });
 
 // Handle browser back/forward buttons
 window.addEventListener('popstate', () => {
     const urlParams = new URLSearchParams(window.location.search);
-    const businessName = urlParams.get('business');
-    const videoId = urlParams.get('video');
+    const businessId = urlParams.get('b');
+    const isVideo = urlParams.get('v');
     
-    if (businessName) {
-        openBusinessModal(businessName);
-    } else if (videoId) {
-        openVideoModal(videoId);
+    if (businessId) {
+        if (isVideo === 'true') {
+            // Find the video card with this business ID
+            const videoCard = Array.from(videoCards).find(card => card.dataset.businessId === businessId);
+            if (videoCard) {
+                const videoId = videoCard.dataset.videoId;
+                openVideoModal(videoId, businessId);
+            }
+        } else {
+            openBusinessModal(businessId);
+        }
     } else {
+        // Close any open modals when navigating back to home
         if (businessModal.classList.contains('active')) {
             businessModal.classList.remove('active');
             document.body.style.overflow = '';
