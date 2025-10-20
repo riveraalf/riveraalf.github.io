@@ -25,11 +25,11 @@ function openBusinessModal(businessId) {
     
     if (card) {
         const title = card.querySelector('h3').textContent;
-        const description = card.querySelector('p').textContent;
+        const description = card.querySelector('p').innerHTML; // <-- FIX 1
         const image = card.querySelector('img').src;
         
         modalTitle.textContent = title;
-        modalDescription.textContent = description;
+        modalDescription.innerHTML = description; // <-- FIX 2
         modalImage.src = image;
         
         businessModal.classList.add('active');
